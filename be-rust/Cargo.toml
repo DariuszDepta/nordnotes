@@ -1,6 +1,6 @@
 [package]
 name = "nordnotes"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["Dariusz Depta <dariusz.depta@engos.software>"]
 description = "Nordic notes"
 repository = "https://github.com/DariuszDepta/nordnotes.git"
