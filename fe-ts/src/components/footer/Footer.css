@@ -1,0 +1,11 @@
+.nn-footer {
+  border-top: solid 1px lightgray;
+}
+
+.nn-footer-copyright {
+  color: var(--primary-color);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-small);
+  text-align: center;
+  padding: 4px;
+}

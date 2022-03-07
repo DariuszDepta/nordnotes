@@ -1,0 +1,38 @@
+.nn-top-title {
+  --title-text-large: 4em;
+  --title-text-medium: 3.2em;
+  --title-text-small: 3em;
+  --title-text-tiny: 2.2em;
+}
+
+.nn-title-text {
+  color: var(--primary-color);
+  font-family: var(--font-family-regular);
+  font-weight: var(--font-weight-bold);
+  padding: 10px 0;
+  text-align: center;
+}
+
+@media all and (min-width: 1001px) {
+  .nn-title-text {
+    font-size: var(--title-text-large);
+  }
+}
+
+@media all and (min-width: 701px) and (max-width: 1000px) {
+  .nn-title-text {
+    font-size: var(--title-text-medium);
+  }
+}
+
+@media all and (min-width: 501px) and (max-width: 700px) {
+  .nn-title-text {
+    font-size: var(--title-text-small);
+  }
+}
+
+@media all and (max-width: 500px) {
+  .nn-title-text {
+    font-size: var(--title-text-tiny);
+  }
+}

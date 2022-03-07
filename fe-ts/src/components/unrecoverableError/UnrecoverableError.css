@@ -1,0 +1,14 @@
+.nn-unrecoverable-error {
+  margin: 0 auto;
+  max-width: var(--content-width);
+  overflow: hidden;
+}
+
+.nn-unrecoverable-error-details {
+  color: var(--validation-error-message-color);
+  font-weight: var(--font-weight-regular);
+  font-size: 16px;
+  text-align: center;
+  margin: 4px;
+  padding: 20px;
+}

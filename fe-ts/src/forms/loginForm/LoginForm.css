@@ -1,0 +1,84 @@
+.nn-login-form {
+  min-width: 260px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.nn-login-form-container {
+  margin: 0 4px;
+}
+
+.nn-login-form-heading {
+  font-weight: var(--button-font-weight);
+  font-size: var(--button-font-size);
+  padding: 12px;
+  text-align: center;
+}
+
+.nn-login-form-inputs {
+  padding: 0;
+}
+
+.nn-login-form-input-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.nn-login-form-input-label {
+  font-weight: var(--label-font-weight);
+  font-size: var(--label-font-size);
+  width: 80px;
+}
+
+.nn-login-form-input-text {
+  display: block;
+  font-weight: var(--font-weight-regular);
+  font-size: 18px;
+  margin-top: 4px;
+  border: solid lightgray 1px;
+  padding: 6px 8px 7px 8px;
+}
+
+.nn-login-form-input-validation-message {
+  color: var(--validation-error-message-color);
+  font-size: 14px;
+  visibility: hidden;
+  padding: 2px 0 10px 0;
+  text-align: center;
+}
+
+.nn-login-form-errors {
+  color: var(--validation-error-message-color);
+  font-size: 14px;
+  visibility: hidden;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.nn-login-form-buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  padding: 0 0 20px 0;
+  font-weight: var(--form-button-font-weight);
+  font-size: var(--form-button-font-size);
+}
+
+.nn-login-form-button-login {
+  background-color: var(--form-button-background);
+  color: var(--form-button-color);
+  padding: var(--form-button-padding);
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.nn-login-form-button-cancel {
+  background-color: var(--form-button-background);
+  color: var(--form-button-color);
+  padding: var(--form-button-padding);
+  margin-left: 5px;
+  cursor: pointer;
+}

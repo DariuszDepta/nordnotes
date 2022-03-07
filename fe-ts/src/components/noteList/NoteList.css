@@ -1,0 +1,19 @@
+.nn-note-list {
+  margin: 0 auto;
+  max-width: var(--content-width);
+  overflow: hidden;
+}
+
+.nn-note-list-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.nn-note-list-button-create-note {
+  font-weight: var(--button-font-weight);
+  font-size: var(--button-font-size);
+  padding: 12px;
+  cursor: pointer;
+  text-align: center;
+}

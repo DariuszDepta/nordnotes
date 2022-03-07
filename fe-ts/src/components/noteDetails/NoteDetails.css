@@ -1,0 +1,35 @@
+.nn-note-details {
+  margin: 0 auto;
+  max-width: var(--content-width);
+  overflow: hidden;
+}
+
+.nn-note-details-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.nn-note-details-button-back {
+  font-weight: var(--button-font-weight);
+  font-size: var(--button-font-size);
+  padding: 12px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.nn-note-details-title {
+  font-family: var(--font-family-regular);
+  font-weight: var(--font-weight-regular);
+  font-size: 24px;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.nn-note-details-content {
+  font-family: var(--font-family-regular);
+  font-weight: var(--font-weight-regular);
+  font-size: 14px;
+  border-top: solid 1px lightgray;
+  padding: 0 12px;
+}

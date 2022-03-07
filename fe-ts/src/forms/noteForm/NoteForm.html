@@ -1,0 +1,39 @@
+<div class="nn-note-form-container">
+  <div class="nn-note-form-heading">NEW NOTE</div>
+  <div class="nn-note-form-inputs">
+    <div class="nn-note-form-input-row">
+      <label for="titleId" class="nn-note-form-input-label">Title</label>
+      <input id="titleId"
+             class="nn-note-form-title"
+             type="text"
+             tabindex="1"
+             maxlength="100"/>
+      <div id="titleValidationMessageId" class="nn-note-form-input-validation-message">title is required</div>
+    </div>
+    <div class="nn-note-form-input-row">
+      <label for="contentId" class="nn-note-form-input-label">Content</label>
+      <textarea id="contentId"
+                class="nn-note-form-content"
+                tabindex="2"
+                rows="10"
+                maxlength="5000"></textarea>
+      <div id="contentValidationMessageId" class="nn-note-form-input-validation-message">content is required</div>
+    </div>
+    <div class="nn-note-form-input-row">
+      <div>
+        <label for="ttlId" class="nn-note-form-input-label">Expires after</label>
+        <input id="ttlId"
+               class="nn-note-form-ttl"
+               type="text"
+               tabindex="3"
+               maxlength="4"
+               placeholder="never"/>
+        <div id="ttlValidationMessageId" class="nn-note-form-input-validation-message">type a number with time marker, e.g. 2w, 8d, 34h or 12m</div>
+      </div>
+    </div>
+  </div>
+  <div class="nn-note-form-buttons">
+    <div id="buttonCreateId" class="nn-note-form-button-create" tabindex="4">Create</div>
+    <div id="buttonCancelId" class="nn-note-form-button-cancel" tabindex="5">Cancel</div>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+.nn-note-list-item {
+  align-self: center;
+}
+
+.nn-note-list-item-container {
+  padding-top: 10px;
+}
+
+.nn-note-list-item-title {
+  white-space: normal;
+  font-size: 1.4em;
+  text-align: left;
+  cursor: pointer;
+}
