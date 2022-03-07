@@ -3,6 +3,7 @@
 [![MIT licensed][mit-badge]][mit-url]
 
 [mit-badge]: https://img.shields.io/badge/License-MIT-blue.svg
+[mit-url]: https://github.com/dmntk/dmntk.rs/blob/main/LICENSE
 
 ## License
 
