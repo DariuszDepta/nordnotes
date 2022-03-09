@@ -28,13 +28,13 @@ use actix_web::{delete, get, post, web, App, HttpRequest, HttpServer};
 /// Shared application data.
 struct ApplicationData {
   /// Shared access to storage.
-  storage: tokio::sync::Mutex<Storage>,
+  storage: tokio::sync::RwLock<Storage>,
 }
 
 /// Handler for deleting all notes.
 #[delete("/api/v1/notes")]
 async fn handler_delete_notes(data: web::Data<ApplicationData>) -> std::io::Result<Json<ResultDto<String>>> {
-  let mut storage = data.storage.lock().await;
+  let mut storage = data.storage.write().await;
   match controller_delete_notes(&mut storage).await {
     Ok(result) => Ok(Json(ResultDto::data(result))),
     Err(reason) => Ok(Json(ResultDto::error(reason))),
@@ -44,7 +44,7 @@ async fn handler_delete_notes(data: web::Data<ApplicationData>) -> std::io::Resu
 /// Handler for retrieving a list of notes.
 #[get("/api/v1/notes")]
 async fn handler_list_notes(data: web::Data<ApplicationData>) -> std::io::Result<Json<ResultDto<Vec<NoteDto>>>> {
-  let storage = data.storage.lock().await;
+  let storage = data.storage.read().await;
   match controller_list_notes(&storage).await {
     Ok(result) => Ok(Json(ResultDto::data(result))),
     Err(reason) => Ok(Json(ResultDto::error(reason))),
@@ -54,7 +54,7 @@ async fn handler_list_notes(data: web::Data<ApplicationData>) -> std::io::Result
 /// Handler for retrieving details of the single note.
 #[get("/api/v1/notes/{id}")]
 async fn handler_get_note(req: HttpRequest, id: Path<String>, data: web::Data<ApplicationData>) -> std::io::Result<Json<ResultDto<NoteDto>>> {
-  let storage = data.storage.lock().await;
+  let storage = data.storage.read().await;
   if is_authorized(&req, &storage) {
     match controller_get_note(&id.into_inner(), &storage).await {
       Ok(result) => Ok(Json(ResultDto::data(result))),
@@ -68,7 +68,7 @@ async fn handler_get_note(req: HttpRequest, id: Path<String>, data: web::Data<Ap
 /// Handler for creating a new note.
 #[post("/api/v1/notes")]
 async fn handler_create_note(req: HttpRequest, params: Json<CreateNoteParams>, data: web::Data<ApplicationData>) -> std::io::Result<Json<ResultDto<NoteDto>>> {
-  let mut storage = data.storage.lock().await;
+  let mut storage = data.storage.write().await;
   if is_authorized(&req, &storage) {
     match controller_create_note(&params.into_inner(), &mut storage).await {
       Ok(result) => Ok(Json(ResultDto::data(result))),
@@ -82,7 +82,7 @@ async fn handler_create_note(req: HttpRequest, params: Json<CreateNoteParams>, d
 /// Handler for user login.
 #[post("/api/v1/login")]
 async fn handler_login(params: Json<LoginParams>, data: web::Data<ApplicationData>) -> std::io::Result<Json<ResultDto<LoginDto>>> {
-  let mut storage = data.storage.lock().await;
+  let mut storage = data.storage.write().await;
   match controller_login(&params.into_inner(), &mut storage).await {
     Ok(result) => Ok(Json(ResultDto::data(result))),
     Err(reason) => Ok(Json(ResultDto::error(reason))),
@@ -98,7 +98,7 @@ async fn not_found_handler(req: HttpRequest) -> std::io::Result<Json<ResultDto<(
 pub async fn start_server() -> Result<()> {
   let storage = Storage::new();
   let application_data = web::Data::new(ApplicationData {
-    storage: tokio::sync::Mutex::new(storage),
+    storage: tokio::sync::RwLock::new(storage),
   });
   let address = "0.0.0.0:8871";
   println!("started nordnotes {}", address);
