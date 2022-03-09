@@ -14,7 +14,7 @@
  * SOFTWARE.
  */
 
-use serde::Deserialize;
+use serde_derive::Deserialize;
 
 /// Parameters needed when processing user's login.
 #[derive(Deserialize)]

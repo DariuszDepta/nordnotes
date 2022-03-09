@@ -16,7 +16,7 @@
 
 use crate::errors::NordNotesError;
 use crate::notes::Note;
-use serde::Serialize;
+use serde_derive::Serialize;
 
 /// Data transfer object for an error.
 #[derive(Serialize)]

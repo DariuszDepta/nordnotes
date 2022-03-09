@@ -22,6 +22,7 @@ extern crate serde;
 extern crate serde_derive;
 extern crate serde_json;
 extern crate time;
+extern crate tokio;
 extern crate uuid;
 
 use crate::server::start_server;
@@ -36,7 +37,7 @@ mod users;
 mod utils;
 
 /// Main entrypoint of the application.
-#[actix_web::main]
+#[tokio::main]
 async fn main() -> std::io::Result<()> {
   start_server().await
 }
