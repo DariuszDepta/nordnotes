@@ -53,10 +53,11 @@ async fn handler_get_notes(data: web::Data<ApplicationData>) -> std::io::Result<
 async fn handler_get_note(req: HttpRequest, id: Path<String>, data: web::Data<ApplicationData>) -> std::io::Result<Json<ResultDto<NoteDto>>> {
   if let Ok(storage) = data.storage.lock() {
     if is_authorized(&req, &storage) {
-      if let Some(note) = storage.get_note(&id).map(|note| note.into()) {
+      let note_id = id.into_inner();
+      if let Some(note) = storage.get_note(&note_id).map(|note| note.into()) {
         Ok(Json(ResultDto::data(note)))
       } else {
-        Ok(Json(ResultDto::error(err_note_not_found(&id))))
+        Ok(Json(ResultDto::error(err_note_not_found(&&note_id))))
       }
     } else {
       Ok(Json(ResultDto::error(err_not_authorized())))
