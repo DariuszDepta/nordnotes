@@ -14,6 +14,9 @@
  * SOFTWARE.
  */
 
+//! Implementation of the JSON API server.
+
+use crate::controllers::*;
 use crate::dto::{LoginDto, NoteDto, ResultDto};
 use crate::errors::*;
 use crate::params::{CreateNoteParams, LoginParams};
@@ -23,26 +26,33 @@ use actix_web::web::{Json, Path};
 use actix_web::{delete, get, post, web, App, HttpRequest, HttpServer};
 use std::sync::Mutex;
 
+/// Shared application data.
 struct ApplicationData {
+  /// Shared access to storage.
   storage: Mutex<Storage>,
 }
 
-/// Handler for retrieving the list of notes.
+/// Handler for deleting all notes.
 #[delete("/api/v1/notes")]
-async fn handler_delete_notes(data: web::Data<ApplicationData>) -> std::io::Result<Json<ResultDto<Vec<NoteDto>>>> {
+async fn handler_delete_notes(data: web::Data<ApplicationData>) -> std::io::Result<Json<ResultDto<String>>> {
   if let Ok(mut storage) = data.storage.lock() {
-    storage.delete_notes();
-    Ok(Json(ResultDto::data(get_notes(&storage))))
+    match controller_delete_notes(&mut storage).await {
+      Ok(result) => Ok(Json(ResultDto::data(result))),
+      Err(reason) => Ok(Json(ResultDto::error(reason))),
+    }
   } else {
     Ok(Json(ResultDto::error(err_no_access_to_storage())))
   }
 }
 
-/// Handler for retrieving the list of notes.
+/// Handler for retrieving a list of notes.
 #[get("/api/v1/notes")]
-async fn handler_get_notes(data: web::Data<ApplicationData>) -> std::io::Result<Json<ResultDto<Vec<NoteDto>>>> {
+async fn handler_list_notes(data: web::Data<ApplicationData>) -> std::io::Result<Json<ResultDto<Vec<NoteDto>>>> {
   if let Ok(storage) = data.storage.lock() {
-    Ok(Json(ResultDto::data(get_notes(&storage))))
+    match controller_list_notes(&storage).await {
+      Ok(result) => Ok(Json(ResultDto::data(result))),
+      Err(reason) => Ok(Json(ResultDto::error(reason))),
+    }
   } else {
     Ok(Json(ResultDto::error(err_no_access_to_storage())))
   }
@@ -136,7 +146,7 @@ pub async fn start_server() -> Result<()> {
       .wrap(cors)
       .app_data(application_data.clone())
       .service(handler_delete_notes)
-      .service(handler_get_notes)
+      .service(handler_list_notes)
       .service(handler_get_note)
       .service(handler_create_note)
       .service(handler_login)
@@ -144,20 +154,8 @@ pub async fn start_server() -> Result<()> {
   })
   .bind(address)?
   .run()
-  .await.map_err(err_server_internal)
-}
-
-/// Returns a list of DTOs for notes.
-fn get_notes(storage: &Storage) -> Vec<NoteDto> {
-  storage
-    .get_notes()
-    .iter()
-    .map(|note| NoteDto {
-      note_id: note.note_id.clone(),
-      title: Some(note.title.clone()),
-      content: None,
-    })
-    .collect()
+  .await
+  .map_err(err_server_internal)
 }
 
 /// Checks if the request contains valid authorization header.

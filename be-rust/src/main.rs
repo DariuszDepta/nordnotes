@@ -29,6 +29,7 @@ use crate::server::start_server;
 use crate::errors::Result;
 
 mod dto;
+mod controllers;
 mod errors;
 mod notes;
 mod params;
