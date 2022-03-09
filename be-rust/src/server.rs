@@ -63,11 +63,9 @@ async fn handler_list_notes(data: web::Data<ApplicationData>) -> std::io::Result
 async fn handler_get_note(req: HttpRequest, id: Path<String>, data: web::Data<ApplicationData>) -> std::io::Result<Json<ResultDto<NoteDto>>> {
   if let Ok(storage) = data.storage.lock() {
     if is_authorized(&req, &storage) {
-      let note_id = id.into_inner();
-      if let Some(note) = storage.get_note(&note_id).map(|note| note.into()) {
-        Ok(Json(ResultDto::data(note)))
-      } else {
-        Ok(Json(ResultDto::error(err_note_not_found(&&note_id))))
+      match controller_get_note(&id.into_inner(), &storage).await {
+        Ok(result) => Ok(Json(ResultDto::data(result))),
+        Err(reason) => Ok(Json(ResultDto::error(reason))),
       }
     } else {
       Ok(Json(ResultDto::error(err_not_authorized())))
@@ -82,22 +80,9 @@ async fn handler_get_note(req: HttpRequest, id: Path<String>, data: web::Data<Ap
 async fn handler_create_note(req: HttpRequest, params: Json<CreateNoteParams>, data: web::Data<ApplicationData>) -> std::io::Result<Json<ResultDto<NoteDto>>> {
   if let Ok(mut storage) = data.storage.lock() {
     if is_authorized(&req, &storage) {
-      if let Some(title) = &params.title {
-        if let Some(content) = &params.content {
-          let ttl = params.ttl.as_ref().unwrap_or(&"".to_string()).to_owned();
-          if let Some(id) = storage.create_note(title, content, &ttl) {
-            Ok(Json(ResultDto::data(NoteDto {
-              note_id: id,
-              ..NoteDto::default()
-            })))
-          } else {
-            Ok(Json(ResultDto::error(err_creating_note_failed())))
-          }
-        } else {
-          Ok(Json(ResultDto::error(err_required_attribute_not_specified("content"))))
-        }
-      } else {
-        Ok(Json(ResultDto::error(err_required_attribute_not_specified("title"))))
+      match controller_create_note(&params.into_inner(), &mut storage).await {
+        Ok(result) => Ok(Json(ResultDto::data(result))),
+        Err(reason) => Ok(Json(ResultDto::error(reason))),
       }
     } else {
       Ok(Json(ResultDto::error(err_not_authorized())))
@@ -111,18 +96,9 @@ async fn handler_create_note(req: HttpRequest, params: Json<CreateNoteParams>, d
 #[post("/api/v1/login")]
 async fn handler_login(params: Json<LoginParams>, data: web::Data<ApplicationData>) -> std::io::Result<Json<ResultDto<LoginDto>>> {
   if let Ok(mut storage) = data.storage.lock() {
-    if let Some(login) = &params.login {
-      if let Some(password) = &params.password {
-        if let Some(token) = storage.get_token(login, password) {
-          Ok(Json(ResultDto::data(LoginDto { token })))
-        } else {
-          Ok(Json(ResultDto::error(err_invalid_login_or_password())))
-        }
-      } else {
-        Ok(Json(ResultDto::error(err_required_attribute_not_specified("password"))))
-      }
-    } else {
-      Ok(Json(ResultDto::error(err_required_attribute_not_specified("login"))))
+    match controller_login(&params.into_inner(), &mut storage).await {
+      Ok(result) => Ok(Json(ResultDto::data(result))),
+      Err(reason) => Ok(Json(ResultDto::error(reason))),
     }
   } else {
     Ok(Json(ResultDto::error(err_no_access_to_storage())))

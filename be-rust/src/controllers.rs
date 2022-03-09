@@ -16,8 +16,9 @@
 
 //! Implementation of controllers called by web server handlers.
 
-use crate::dto::NoteDto;
-use crate::errors::Result;
+use crate::dto::{LoginDto, NoteDto};
+use crate::errors::*;
+use crate::params::{CreateNoteParams, LoginParams};
 use crate::storage::Storage;
 
 /// Controller for deleting all notes.
@@ -39,4 +40,51 @@ pub async fn controller_list_notes(storage: &Storage) -> Result<Vec<NoteDto>> {
       })
       .collect(),
   )
+}
+
+/// Controller for retrieving a single note.
+pub async fn controller_get_note(note_id: &str, storage: &Storage) -> Result<NoteDto> {
+  if let Some(note) = storage.get_note(&note_id) {
+    Ok(note.into())
+  } else {
+    Err(err_note_not_found(note_id))
+  }
+}
+
+/// Controller for creating a new note.
+pub async fn controller_create_note(params: &CreateNoteParams, storage: &mut Storage) -> Result<NoteDto> {
+  if let Some(title) = &params.title {
+    if let Some(content) = &params.content {
+      let ttl = params.ttl.as_ref().unwrap_or(&"".to_string()).to_owned();
+      if let Some(id) = storage.create_note(title, content, &ttl) {
+        Ok(NoteDto {
+          note_id: id,
+          ..NoteDto::default()
+        })
+      } else {
+        Err(err_creating_note_failed())
+      }
+    } else {
+      Err(err_required_attribute_not_specified("content"))
+    }
+  } else {
+    Err(err_required_attribute_not_specified("title"))
+  }
+}
+
+/// Controller for user login.
+pub async fn controller_login(params: &LoginParams, storage: &mut Storage) -> Result<LoginDto> {
+  if let Some(login) = &params.login {
+    if let Some(password) = &params.password {
+      if let Some(token) = storage.get_token(login, password) {
+        Ok(LoginDto { token })
+      } else {
+        Err(err_invalid_login_or_password())
+      }
+    } else {
+      Err(err_required_attribute_not_specified("password"))
+    }
+  } else {
+    Err(err_required_attribute_not_specified("login"))
+  }
 }
