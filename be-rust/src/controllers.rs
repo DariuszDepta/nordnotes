@@ -44,7 +44,7 @@ pub async fn controller_list_notes(storage: &Storage) -> Result<Vec<NoteDto>> {
 
 /// Controller for retrieving a single note.
 pub async fn controller_get_note(note_id: &str, storage: &Storage) -> Result<NoteDto> {
-  if let Some(note) = storage.get_note(&note_id) {
+  if let Some(note) = storage.get_note(note_id) {
     Ok(note.into())
   } else {
     Err(err_note_not_found(note_id))

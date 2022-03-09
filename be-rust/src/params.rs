@@ -14,6 +14,8 @@
  * SOFTWARE.
  */
 
+//! Implementation of input parameters needed by controllers.
+
 use serde_derive::Deserialize;
 
 /// Parameters needed when processing user's login.

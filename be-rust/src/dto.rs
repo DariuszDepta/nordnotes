@@ -14,8 +14,10 @@
  * SOFTWARE.
  */
 
+//! Implementation of data transfer objects.
+
 use crate::errors::NordNotesError;
-use crate::notes::Note;
+use crate::notes::NoteEntity;
 use serde_derive::Serialize;
 
 /// Data transfer object for an error.
@@ -75,16 +77,16 @@ pub struct NoteDto {
   pub content: Option<String>,
 }
 
-impl From<Note> for NoteDto {
-  /// Converts a [Note] into [NoteDto].
-  fn from(note: Note) -> Self {
+impl From<NoteEntity> for NoteDto {
+  /// Converts a [NoteEntity] into [NoteDto].
+  fn from(note: NoteEntity) -> Self {
     Self::from(&note)
   }
 }
 
-impl From<&Note> for NoteDto {
-  /// Converts a reference to [Note] into [NoteDto].
-  fn from(note: &Note) -> Self {
+impl From<&NoteEntity> for NoteDto {
+  /// Converts a reference to [NoteEntity] into [NoteDto].
+  fn from(note: &NoteEntity) -> Self {
     Self {
       note_id: note.note_id.clone(),
       title: Some(note.title.clone()),

@@ -14,8 +14,10 @@
  * SOFTWARE.
  */
 
-use crate::notes::Note;
-use crate::users::User;
+//! Implementation of storage access.
+
+use crate::notes::NoteEntity;
+use crate::users::UserEntity;
 use uuid::Uuid;
 
 const NOTES_LIMIT: usize = 20;
@@ -24,9 +26,9 @@ const NOTES_LIMIT: usize = 20;
 #[derive(Clone)]
 pub struct Storage {
   /// Collection of notes.
-  pub notes: Vec<Note>,
+  pub notes: Vec<NoteEntity>,
   /// Collection of users.
-  pub users: Vec<User>,
+  pub users: Vec<UserEntity>,
 }
 
 impl Storage {
@@ -42,11 +44,11 @@ impl Storage {
     self.notes.clear();
   }
   /// Returns a list of notes that has not expired yet.
-  pub fn get_notes(&self) -> Vec<Note> {
+  pub fn get_notes(&self) -> Vec<NoteEntity> {
     self.notes.iter().filter(|note| !note.has_expired()).cloned().collect()
   }
   /// Returns a note with specified identifier.
-  pub fn get_note(&self, id: &str) -> Option<Note> {
+  pub fn get_note(&self, id: &str) -> Option<NoteEntity> {
     for note in &self.notes {
       if note.note_id == id && !note.has_expired() {
         return Some(note.clone());
@@ -60,7 +62,7 @@ impl Storage {
     if self.notes.len() >= NOTES_LIMIT {
       self.notes.remove(0);
     }
-    let note = Note::new(title, content, ttl);
+    let note = NoteEntity::new(title, content, ttl);
     let note_id = note.note_id.clone();
     self.notes.push(note);
     Some(note_id)
@@ -93,23 +95,23 @@ impl Storage {
 }
 
 /// Returns few initial notes.
-pub fn load_notes() -> Vec<Note> {
+pub fn load_notes() -> Vec<NoteEntity> {
   vec![
-    Note::new("Note 1", "My first note", "1m"),
-    Note::new("Note 2", "My second note", "3m"),
-    Note::new("Note 3", "My third note", "5m"),
-    Note::new("Note 4", "My fourth note", "10m"),
+    NoteEntity::new("Note 1", "My first note", "1m"),
+    NoteEntity::new("Note 2", "My second note", "3m"),
+    NoteEntity::new("Note 3", "My third note", "5m"),
+    NoteEntity::new("Note 4", "My fourth note", "10m"),
   ]
 }
 
 /// Loads user names and passwords from file.
-pub fn load_users() -> Vec<User> {
+pub fn load_users() -> Vec<UserEntity> {
   let mut users = vec![];
   if let Ok(content) = std::fs::read_to_string("users") {
     for line in content.lines() {
       let mut split = line.split(':');
       if let Some((login, password)) = split.next().zip(split.next()) {
-        users.push(User::new(login, password));
+        users.push(UserEntity::new(login, password));
       }
     }
   }

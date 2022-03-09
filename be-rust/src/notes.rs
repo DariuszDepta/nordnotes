@@ -14,15 +14,15 @@
  * SOFTWARE.
  */
 
-//! Implementation of the data object for notes.
+//! Implementation of note entity.
 
 use crate::utils::{create_and_expiration_date_time, uuid};
 use time::macros::format_description;
 use time::{OffsetDateTime, PrimitiveDateTime};
 
-/// Data object for note.
+/// Note entity.
 #[derive(Clone)]
-pub struct Note {
+pub struct NoteEntity {
   /// Unique note identifier.
   pub note_id: String,
   /// Title of the note.
@@ -37,8 +37,8 @@ pub struct Note {
   pub expires_at: Option<String>,
 }
 
-impl Note {
-  /// Creates a new note with title, content and expiration time.
+impl NoteEntity {
+  /// Creates a new note entity with title, content and expiration time.
   pub fn new(title: &str, content: &str, ttl: &str) -> Self {
     let (created_at, expires_at) = create_and_expiration_date_time(ttl);
     Self {

@@ -14,13 +14,13 @@
  * SOFTWARE.
  */
 
-//! Implementation of the data object for users.
+//! Implementation of user entity.
 
 use crate::utils::uuid;
 
-/// Data object for user.
+/// User entity.
 #[derive(Clone)]
-pub struct User {
+pub struct UserEntity {
   /// Unique user identifier.
   pub user_id: String,
   /// User login.
@@ -31,8 +31,8 @@ pub struct User {
   pub token: Option<String>,
 }
 
-impl User {
-  /// Creates a new user.
+impl UserEntity {
+  /// Creates a new user entity.
   pub fn new(login: &str, password: &str) -> Self {
     Self {
       user_id: uuid(),

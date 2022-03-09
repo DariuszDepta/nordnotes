@@ -14,7 +14,7 @@
  * SOFTWARE.
  */
 
-//! Utilities.
+//! Utility functions.
 
 use time::macros::format_description;
 use time::{Duration, OffsetDateTime};

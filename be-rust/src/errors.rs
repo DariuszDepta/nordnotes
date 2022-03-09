@@ -70,11 +70,6 @@ pub fn err_creating_note_failed() -> NordNotesError {
   NordNotesError("creating a new note has failed".to_string())
 }
 
-/// Creates an access to storage error.
-pub fn err_no_access_to_storage() -> NordNotesError {
-  NordNotesError("no access to storage".to_string())
-}
-
 /// Creates a not authorized user error.
 pub fn err_not_authorized() -> NordNotesError {
   NordNotesError("not authorized".to_string())
