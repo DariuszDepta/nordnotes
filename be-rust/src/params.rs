@@ -14,8 +14,9 @@
  * SOFTWARE.
  */
 
-//! Implementation of input parameters needed by controllers.
+//! Implementation of input parameters required by controllers.
 
+use crate::errors::*;
 use serde_derive::Deserialize;
 
 /// Parameters needed when processing user's login.
@@ -25,6 +26,21 @@ pub struct LoginParams {
   pub login: Option<String>,
   #[serde(rename = "password")]
   pub password: Option<String>,
+}
+
+impl LoginParams {
+  /// Validates required parameters for logging a user.
+  pub fn validate(self) -> Result<(String, String)> {
+    if let Some(login) = self.login {
+      if let Some(password) = self.password {
+        Ok((login, password))
+      } else {
+        Err(err_required_attribute_not_specified("password"))
+      }
+    } else {
+      Err(err_required_attribute_not_specified("login"))
+    }
+  }
 }
 
 /// Parameters needed when a new note is created.
@@ -42,4 +58,19 @@ pub struct CreateNoteParams {
   /// For example `ttl` == "10d" means that the note will expire after 10 days from creation.
   #[serde(rename = "ttl")]
   pub ttl: Option<String>,
+}
+
+impl CreateNoteParams {
+  /// Validates required parameters for creating a new note.
+  pub fn validate(self) -> Result<(String, String, String)> {
+    if let Some(title) = self.title {
+      if let Some(content) = self.content {
+        Ok((title, content, self.ttl.unwrap_or("".to_string()).to_owned()))
+      } else {
+        Err(err_required_attribute_not_specified("content"))
+      }
+    } else {
+      Err(err_required_attribute_not_specified("title"))
+    }
+  }
 }

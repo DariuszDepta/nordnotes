@@ -43,48 +43,33 @@ pub async fn controller_list_notes(storage: &Storage) -> Result<Vec<NoteDto>> {
 }
 
 /// Controller for retrieving a single note.
-pub async fn controller_get_note(note_id: &str, storage: &Storage) -> Result<NoteDto> {
-  if let Some(note) = storage.get_note(note_id) {
+pub async fn controller_get_note(note_id: String, storage: &Storage) -> Result<NoteDto> {
+  if let Some(note) = storage.get_note(&note_id) {
     Ok(note.into())
   } else {
-    Err(err_note_not_found(note_id))
+    Err(err_note_not_found(&note_id))
   }
 }
 
 /// Controller for creating a new note.
-pub async fn controller_create_note(params: &CreateNoteParams, storage: &mut Storage) -> Result<NoteDto> {
-  if let Some(title) = &params.title {
-    if let Some(content) = &params.content {
-      let ttl = params.ttl.as_ref().unwrap_or(&"".to_string()).to_owned();
-      if let Some(id) = storage.create_note(title, content, &ttl) {
-        Ok(NoteDto {
-          note_id: id,
-          ..NoteDto::default()
-        })
-      } else {
-        Err(err_creating_note_failed())
-      }
-    } else {
-      Err(err_required_attribute_not_specified("content"))
-    }
+pub async fn controller_create_note(params: CreateNoteParams, storage: &mut Storage) -> Result<NoteDto> {
+  let (title, content, ttl) = params.validate()?;
+  if let Some(id) = storage.create_note(&title, &content, &ttl) {
+    Ok(NoteDto {
+      note_id: id,
+      ..NoteDto::default()
+    })
   } else {
-    Err(err_required_attribute_not_specified("title"))
+    Err(err_creating_note_failed())
   }
 }
 
 /// Controller for user login.
-pub async fn controller_login(params: &LoginParams, storage: &mut Storage) -> Result<LoginDto> {
-  if let Some(login) = &params.login {
-    if let Some(password) = &params.password {
-      if let Some(token) = storage.get_token(login, password) {
-        Ok(LoginDto { token })
-      } else {
-        Err(err_invalid_login_or_password())
-      }
-    } else {
-      Err(err_required_attribute_not_specified("password"))
-    }
+pub async fn controller_login(params: LoginParams, storage: &mut Storage) -> Result<LoginDto> {
+  let (login, password) = params.validate()?;
+  if let Some(token) = storage.get_token(&login, &password) {
+    Ok(LoginDto { token })
   } else {
-    Err(err_required_attribute_not_specified("login"))
+    Err(err_invalid_login_or_password())
   }
 }
