@@ -25,17 +25,16 @@ extern crate time;
 extern crate tokio;
 extern crate uuid;
 
-use crate::server::start_server;
 use crate::errors::Result;
+use crate::server::start_server;
 
-mod dto;
 mod controllers;
+mod dto;
+mod entities;
 mod errors;
-mod notes;
 mod params;
 mod server;
 mod storage;
-mod users;
 mod utils;
 
 /// Main entrypoint of the `nordnotes` application.

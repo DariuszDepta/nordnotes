@@ -16,8 +16,7 @@
 
 //! Implementation of storage access.
 
-use crate::notes::NoteEntity;
-use crate::users::UserEntity;
+use crate::entities::{NoteEntity, UserEntity};
 use uuid::Uuid;
 
 const NOTES_LIMIT: usize = 20;
