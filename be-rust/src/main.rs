@@ -14,7 +14,7 @@
  * SOFTWARE.
  */
 
-//! Application description (TBD)
+//! The `nordnotes` application.
 
 extern crate actix_cors;
 extern crate actix_web;
@@ -26,6 +26,7 @@ extern crate tokio;
 extern crate uuid;
 
 use crate::server::start_server;
+use crate::errors::Result;
 
 mod dto;
 mod errors;
@@ -36,8 +37,8 @@ mod storage;
 mod users;
 mod utils;
 
-/// Main entrypoint of the application.
+/// Main entrypoint of the `nordnotes` application.
 #[tokio::main]
-async fn main() -> std::io::Result<()> {
+async fn main() -> Result<()> {
   start_server().await
 }

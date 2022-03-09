@@ -124,7 +124,7 @@ async fn not_found_handler(req: HttpRequest) -> std::io::Result<Json<ResultDto<(
 }
 
 /// Starts the server.
-pub async fn start_server() -> std::io::Result<()> {
+pub async fn start_server() -> Result<()> {
   let storage = Storage::new();
   let application_data = web::Data::new(ApplicationData { storage: Mutex::new(storage) });
   let address = "0.0.0.0:8871";
@@ -143,7 +143,7 @@ pub async fn start_server() -> std::io::Result<()> {
   })
   .bind(address)?
   .run()
-  .await
+  .await.map_err(err_server_internal)
 }
 
 /// Returns a list of DTOs for notes.

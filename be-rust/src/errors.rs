@@ -14,55 +14,68 @@
  * SOFTWARE.
  */
 
-/// Common error definition used by `nordnotes` application.
+//! Definition of common error type used across `nordnotes` application.
+
+use std::fmt::Display;
+use std::io::Error;
+
+/// Common result type used across `nordnotes` application.
+pub type Result<T, E = NordNotesError> = std::result::Result<T, E>;
+
+/// Common error used across `nordnotes` application.
 #[derive(Debug)]
 pub struct NordNotesError(String);
 
-impl std::fmt::Display for NordNotesError {
-  /// Implementation of [Display](std::fmt::Display) trait for [NordNotesError].
+impl Display for NordNotesError {
+  /// Implementation of [Display] trait for [NordNotesError].
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
     write!(f, "{}", self.0)
   }
 }
 
-impl NordNotesError {
-  /// Creates a new [NordNotesError] with specified `message`.
-  pub fn new(message: &str) -> Self {
-    Self(message.to_string())
+impl From<Error> for NordNotesError {
+  /// Converts [Error] into [NordNotesError].
+  fn from(e: Error) -> Self {
+    Self(e.to_string())
   }
 }
 
-/// Creates a new error describing non-existing endpoint.
+/// Creates an internal web server error description.
+pub fn err_server_internal(e: Error) -> NordNotesError {
+  e.into()
+}
+
+/// Creates a non-existing endpoint error.
 pub fn err_endpoint_not_found(message: &str) -> NordNotesError {
-  NordNotesError::new(&format!("endpoint not found: {}", message))
+  NordNotesError(format!("endpoint not found: {}", message))
 }
 
-/// Creates a new error describing non-existing note.
+/// Creates a non-existing note error.
 pub fn err_note_not_found(note_id: &str) -> NordNotesError {
-  NordNotesError::new(&format!("note not found, id = {}", note_id))
+  NordNotesError(format!("note not found, id = {}", note_id))
 }
 
-/// Creates a new error describing missing required attribute
+/// Creates a missing required attribute error.
 pub fn err_required_attribute_not_specified(attribute_name: &str) -> NordNotesError {
-  NordNotesError::new(&format!("required attribute not specified, name = {}", attribute_name))
+  NordNotesError(format!("required attribute not specified, name = {}", attribute_name))
 }
 
-/// Creates a new error describing why login has failed.
+/// Creates a failed login error.
 pub fn err_invalid_login_or_password() -> NordNotesError {
-  NordNotesError::new("invalid login or password")
+  NordNotesError("invalid login or password".to_string())
 }
 
-/// Creates a new error describing that creating a new note has failed.
+/// Creates a failed note creation error.
 pub fn err_creating_note_failed() -> NordNotesError {
-  NordNotesError::new("creating a new note has failed")
+  NordNotesError("creating a new note has failed".to_string())
 }
 
-/// Creates a new error describing no access to storage.
+/// Creates an access to storage error.
 pub fn err_no_access_to_storage() -> NordNotesError {
-  NordNotesError::new("no access to storage")
+  NordNotesError("no access to storage".to_string())
 }
 
-/// Creates a new error describing that a user is not authorized.
+/// Creates a not authorized user error.
 pub fn err_not_authorized() -> NordNotesError {
-  NordNotesError::new("not authorized")
+  NordNotesError("not authorized".to_string())
 }
