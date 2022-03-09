@@ -17,11 +17,12 @@
 //! Implementation of database entities.
 
 use crate::utils::{create_and_expiration_date_time, uuid};
+use scylla::macros::FromRow;
 use time::macros::format_description;
 use time::{OffsetDateTime, PrimitiveDateTime};
 
 /// Note entity.
-#[derive(Clone)]
+#[derive(Debug, Clone, FromRow)]
 pub struct NoteEntity {
   /// Unique note identifier.
   pub note_id: String,
@@ -62,7 +63,7 @@ impl NoteEntity {
 }
 
 /// User entity.
-#[derive(Clone)]
+#[derive(Debug, Clone, FromRow)]
 pub struct UserEntity {
   /// Unique user identifier.
   pub user_id: String,

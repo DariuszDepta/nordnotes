@@ -96,7 +96,7 @@ async fn not_found_handler(req: HttpRequest) -> std::io::Result<Json<ResultDto<(
 
 /// Starts the server.
 pub async fn start_server() -> Result<()> {
-  let storage = Storage::new();
+  let storage = Storage::new().await?;
   let application_data = web::Data::new(ApplicationData {
     storage: tokio::sync::RwLock::new(storage),
   });

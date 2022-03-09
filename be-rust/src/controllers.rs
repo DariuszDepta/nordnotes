@@ -23,7 +23,7 @@ use crate::storage::Storage;
 
 /// Controller for deleting all notes.
 pub async fn controller_delete_notes(storage: &mut Storage) -> Result<String> {
-  storage.delete_notes();
+  storage.delete_notes().await?;
   Ok("all notes deleted".to_string())
 }
 
@@ -32,6 +32,7 @@ pub async fn controller_list_notes(storage: &Storage) -> Result<Vec<NoteDto>> {
   Ok(
     storage
       .get_notes()
+      .await?
       .iter()
       .map(|note| NoteDto {
         note_id: note.note_id.clone(),
@@ -44,21 +45,15 @@ pub async fn controller_list_notes(storage: &Storage) -> Result<Vec<NoteDto>> {
 
 /// Controller for retrieving a single note.
 pub async fn controller_get_note(note_id: String, storage: &Storage) -> Result<NoteDto> {
-  if let Some(note) = storage.get_note(&note_id) {
-    Ok(note.into())
-  } else {
-    Err(err_note_not_found(&note_id))
-  }
+  let note = storage.get_note(&note_id).await?;
+  Ok(note.into())
 }
 
 /// Controller for creating a new note.
 pub async fn controller_create_note(params: CreateNoteParams, storage: &mut Storage) -> Result<NoteDto> {
   let (title, content, ttl) = params.validate()?;
-  if let Some(id) = storage.create_note(&title, &content, &ttl) {
-    Ok(NoteDto {
-      note_id: id,
-      ..NoteDto::default()
-    })
+  if let Ok(note_id) = storage.create_note(&title, &content, &ttl).await {
+    Ok(NoteDto { note_id, ..NoteDto::default() })
   } else {
     Err(err_creating_note_failed())
   }

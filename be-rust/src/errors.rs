@@ -16,6 +16,8 @@
 
 //! Definition of common error type used across `nordnotes` application.
 
+use scylla::cql_to_rust::FromRowError;
+use scylla::transport::errors::{NewSessionError, QueryError};
 use std::fmt::Display;
 use std::io::Error;
 
@@ -73,4 +75,19 @@ pub fn err_creating_note_failed() -> NordNotesError {
 /// Creates a not authorized user error.
 pub fn err_not_authorized() -> NordNotesError {
   NordNotesError("not authorized".to_string())
+}
+
+/// Creates a new session initialization error.
+pub fn err_new_session(e: NewSessionError) -> NordNotesError {
+  NordNotesError(format!("{:?}", e))
+}
+
+/// Creates an error for failed query.
+pub fn err_query(e: QueryError) -> NordNotesError {
+  NordNotesError(format!("{:?}", e))
+}
+
+/// Creates an error for failure during row conversion.
+pub fn err_from_row(e: FromRowError) -> NordNotesError {
+  NordNotesError(format!("{:?}", e))
 }
