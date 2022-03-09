@@ -65,7 +65,7 @@ impl CreateNoteParams {
   pub fn validate(self) -> Result<(String, String, String)> {
     if let Some(title) = self.title {
       if let Some(content) = self.content {
-        Ok((title, content, self.ttl.unwrap_or("".to_string()).to_owned()))
+        Ok((title, content, self.ttl.unwrap_or_else(|| "".to_string())))
       } else {
         Err(err_required_attribute_not_specified("content"))
       }
