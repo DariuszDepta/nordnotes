@@ -13,7 +13,7 @@
 | be-python | Back-end written in Python.                     |
 | be-rust   | Back-end written in Rust.                       |
 | db-scylla | NoSQL database used by backend written in Rust. |
-| fe-ts     | Front-end applicatioj written in TypeScript.    |
+| fe-ts     | Front-end application written in TypeScript.    |
 | te-bash   | Simple integration tests written in Bash.       |
 | te-go     | Integration tests written in Go.                |
 
