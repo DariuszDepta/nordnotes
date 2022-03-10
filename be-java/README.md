@@ -1,3 +1,1 @@
-# nordnotes back-end written in Java
-
-
+# Java back-end

@@ -9,6 +9,8 @@
 
 | Directory | Description                                     |
 |-----------|-------------------------------------------------|
+| be-java   | Back-end written in Java.                       |
+| be-python | Back-end written in Python.                     |
 | be-rust   | Back-end written in Rust.                       |
 | db-scylla | NoSQL database used by backend written in Rust. |
 | fe-ts     | Front-end applicatioj written in TypeScript.    |
@@ -18,4 +20,3 @@
 ## License
 
 Licensed under [MIT license](https://opensource.org/licenses/MIT) ([LICENSE](https://github.com/dmntk/dmntk.rs/blob/main/LICENSE-MIT)).
-
