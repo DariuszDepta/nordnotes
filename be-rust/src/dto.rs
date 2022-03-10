@@ -63,6 +63,20 @@ impl<T> ResultDto<T> {
   }
 }
 
+/// Data transfer object for service information.
+#[derive(Serialize)]
+pub struct ServiceInfoDto {
+  /// Service name.
+  #[serde(rename = "name")]
+  pub name: String,
+  /// Service version.
+  #[serde(rename = "version")]
+  pub version: String,
+  /// Legal note.
+  #[serde(rename = "legalNote")]
+  pub legal_note: String,
+}
+
 /// Data transfer object for a note.
 #[derive(Default, Serialize)]
 pub struct NoteDto {

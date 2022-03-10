@@ -17,7 +17,7 @@
 //! Implementation of the web server.
 
 use crate::controllers::*;
-use crate::dto::{LoginDto, NoteDto, ResultDto};
+use crate::dto::{LoginDto, NoteDto, ResultDto, ServiceInfoDto};
 use crate::errors::*;
 use crate::params::{CreateNoteParams, LoginParams};
 use crate::storage::Storage;
@@ -29,6 +29,17 @@ use actix_web::{delete, get, post, web, App, HttpRequest, HttpServer};
 struct ApplicationData {
   /// Shared access to storage.
   storage: tokio::sync::RwLock<Storage>,
+}
+
+/// Handler for service information.
+#[get("/api/v1/info")]
+async fn handler_service_info() -> std::io::Result<Json<ResultDto<ServiceInfoDto>>> {
+  let service_info = ServiceInfoDto {
+    name: "nordnotes".to_string(),
+    version: "1.0.0".to_string(),
+    legal_note: "Copyright © 2022 Dariusz Depta Engos Software".to_string(),
+  };
+  Ok(Json(ResultDto::data(service_info)))
 }
 
 /// Handler for deleting all notes.
@@ -107,6 +118,7 @@ pub async fn start_server() -> Result<()> {
     App::new()
       .wrap(cors)
       .app_data(application_data.clone())
+      .service(handler_service_info)
       .service(handler_delete_notes)
       .service(handler_list_notes)
       .service(handler_get_note)
