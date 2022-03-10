@@ -42,7 +42,7 @@ func TcServiceInfo(ctx *o.Context, dtx *o.DocContext) {
 	dtx.CollectAll("System information", "")
 	o.HttpGET(ctx, dtx, ServiceUrl, nil, nil, &result, 200)
 	AssertServiceInfo(result)
-	c.DisplayOK()
+	o.Ok()
 }
 
 func AssertServiceInfo(result ServiceInfoResult) {

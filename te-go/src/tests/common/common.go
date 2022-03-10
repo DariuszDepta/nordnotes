@@ -1,7 +1,6 @@
 package common
 
 import (
-	"fmt"
 	o "github.com/EngosSoftware/oxyde"
 )
 
@@ -11,7 +10,7 @@ const (
 	ApiVersion1      = "v1"
 )
 
-// ErrorDto defines attributes of the error.
+// ErrorDto defines attributes of the error returned from failing request.
 type ErrorDto struct {
 	Details string `json:"details" api:"Detailed description of the error."`
 }
@@ -19,9 +18,4 @@ type ErrorDto struct {
 // NORDNOTES returns initialized context for nordnotes application testing.
 func NORDNOTES() o.Context {
 	return o.Context{Url: NordnotesURL, Version: ApiVersion1, Verbose: false}
-}
-
-// DisplayOK prints to standard output the text 'OK' followed by newline character.
-func DisplayOK() {
-	fmt.Println("OK")
 }
