@@ -36,6 +36,6 @@ public class SystemController extends BaseController {
    */
   @GetMapping(M_SYSTEM_INFO)
   public ResultDto<SystemInfoDto> getSystemInfo() {
-    return systemInfoDtoFactory.from("nordnotes","1.0.0","Copyright");
+    return systemInfoDtoFactory.from("nordnotes","1.0.0","Copyright © 2022 Dariusz Depta Engos Software");
   }
 }
