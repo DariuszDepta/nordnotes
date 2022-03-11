@@ -56,8 +56,6 @@ pub struct Storage {
   session: Session,
   /// Repository for manipulating notes.
   notes_repository: NotesRepository,
-  /// Collection of notes.
-  //pub notes: Vec<NoteEntity>,
   /// Collection of users.
   pub users: Vec<UserEntity>,
 }

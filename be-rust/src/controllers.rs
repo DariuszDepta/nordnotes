@@ -14,7 +14,16 @@
  * SOFTWARE.
  */
 
-//! Implementation of controllers called by web server handlers.
+//! Implementation of controllers called by request handlers.
+//!
+//! Controller responsibilities:
+//! - take request parameters as input values.
+//! - validate input parameters (when needed),
+//! - convert parameters into input values processed by services,
+//! - orchestrate service invocation that business logic is executed,
+//! - gather output values,
+//! - convert output values into DTOs.
+//! - return DTOs (or collections of DTOs) as a result of processing.
 
 use crate::dto::{LoginDto, NoteDto};
 use crate::errors::*;

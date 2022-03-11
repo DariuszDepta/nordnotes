@@ -34,6 +34,7 @@ mod controllers;
 mod dto;
 mod entities;
 mod errors;
+mod handlers;
 mod params;
 mod repositories;
 mod server;
