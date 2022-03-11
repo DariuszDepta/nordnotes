@@ -38,6 +38,7 @@ mod handlers;
 mod params;
 mod repositories;
 mod server;
+mod services;
 mod storage;
 mod utils;
 
