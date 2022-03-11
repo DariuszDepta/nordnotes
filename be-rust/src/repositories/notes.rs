@@ -14,7 +14,7 @@
  * SOFTWARE.
  */
 
-//! Implementation of database repositories.
+//! Implementation of database repository for notes.
 
 use crate::entities::note::NoteEntity;
 use crate::errors::*;
@@ -35,14 +35,14 @@ lazy_static! {
   );
 }
 
+/// Repository for notes.
+pub struct NotesRepository;
+
 /// Value list containing the note's identifier.
 #[derive(ValueList)]
 struct NoteId {
   note_id: String,
 }
-
-/// Repository for notes.
-pub struct NotesRepository;
 
 impl NotesRepository {
   /// Deletes all notes.

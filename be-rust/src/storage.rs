@@ -19,7 +19,7 @@
 use crate::entities::note::NoteEntity;
 use crate::entities::user::UserEntity;
 use crate::errors::*;
-use crate::repositories::NotesRepository;
+use crate::repositories::notes::NotesRepository;
 use crate::utils::uuid;
 use lazy_static::lazy_static;
 use scylla::transport::session::PoolSize;
