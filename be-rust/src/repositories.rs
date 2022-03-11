@@ -16,7 +16,7 @@
 
 //! Implementation of database repositories.
 
-use crate::entities::NoteEntity;
+use crate::entities::note::NoteEntity;
 use crate::errors::*;
 use crate::storage::{KEYSPACE, TABLE_NOTES};
 use lazy_static::lazy_static;
@@ -41,7 +41,7 @@ struct NoteId {
   note_id: String,
 }
 
-/// Repository for data manipulation on notes.
+/// Repository for notes.
 pub struct NotesRepository;
 
 impl NotesRepository {

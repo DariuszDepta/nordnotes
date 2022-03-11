@@ -14,7 +14,7 @@
  * SOFTWARE.
  */
 
-//! Request handlers.
+//! Implementation of request handlers called by web server.
 //!
 //! Request handlers are split between several modules, usually by *entity domain*.
 //! It means that for example handlers operating on notes are grouped together.

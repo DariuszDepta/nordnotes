@@ -16,7 +16,8 @@
 
 //! Implementation of storage access.
 
-use crate::entities::{NoteEntity, UserEntity};
+use crate::entities::note::NoteEntity;
+use crate::entities::user::UserEntity;
 use crate::errors::*;
 use crate::repositories::NotesRepository;
 use crate::utils::uuid;

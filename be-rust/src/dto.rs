@@ -16,7 +16,7 @@
 
 //! Implementation of data transfer objects.
 
-use crate::entities::NoteEntity;
+use crate::entities::note::NoteEntity;
 use crate::errors::NordNotesError;
 use serde_derive::Serialize;
 

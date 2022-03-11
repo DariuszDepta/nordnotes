@@ -14,7 +14,7 @@
  * SOFTWARE.
  */
 
-//! Implementation of database entities.
+//! Implementation of note entity.
 
 use crate::utils::{create_and_expiration_date_time, uuid};
 use scylla::macros::FromRow;
@@ -59,30 +59,5 @@ impl NoteEntity {
       }
     }
     false
-  }
-}
-
-/// User entity.
-#[derive(Debug, Clone, FromRow)]
-pub struct UserEntity {
-  /// Unique user identifier.
-  pub user_id: String,
-  /// User login.
-  pub login: String,
-  /// User password.
-  pub password: String,
-  /// Token generated for the user.
-  pub token: Option<String>,
-}
-
-impl UserEntity {
-  /// Creates a new user entity.
-  pub fn new(login: &str, password: &str) -> Self {
-    Self {
-      user_id: uuid(),
-      login: login.to_string(),
-      password: password.to_string(),
-      token: None,
-    }
   }
 }
