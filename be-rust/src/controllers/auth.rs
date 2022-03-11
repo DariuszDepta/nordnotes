@@ -14,19 +14,19 @@
  * SOFTWARE.
  */
 
-use crate::controllers::auth;
-use crate::dto::{LoginDto, ResultDto};
-use crate::params::LoginParams;
-use crate::server::ApplicationData;
-use actix_web::web::Json;
-use actix_web::{post, web};
+//! Implementation of controllers for authorization.
 
-/// Handler for logging a user.
-#[post("/api/v1/login")]
-pub async fn login(params: Json<LoginParams>, data: web::Data<ApplicationData>) -> std::io::Result<Json<ResultDto<LoginDto>>> {
-  let mut storage = data.storage.write().await;
-  match auth::login(params.into_inner(), &mut storage).await {
-    Ok(result) => Ok(Json(ResultDto::data(result))),
-    Err(reason) => Ok(Json(ResultDto::error(reason))),
+use crate::dto::LoginDto;
+use crate::errors::*;
+use crate::params::LoginParams;
+use crate::storage::Storage;
+
+/// Controller for logging a user.
+pub async fn login(params: LoginParams, storage: &mut Storage) -> Result<LoginDto> {
+  let (login, password) = params.validate()?;
+  if let Some(token) = storage.get_token(&login, &password) {
+    Ok(LoginDto { token })
+  } else {
+    Err(err_invalid_login_or_password())
   }
 }
