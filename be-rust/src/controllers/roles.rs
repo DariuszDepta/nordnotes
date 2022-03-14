@@ -43,7 +43,7 @@ pub async fn find(id: String, storage: &Storage) -> Result<RoleDto> {
   Ok(storage.roles_repository.find(&id).await?.into())
 }
 
-/// Controller for deleting all notes.
+/// Controller for deleting all roles.
 pub async fn delete_all(storage: &mut Storage) -> Result<String> {
   storage.roles_repository.delete_all().await?;
   Ok("all roles deleted".to_string())
