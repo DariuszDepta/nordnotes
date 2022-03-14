@@ -33,6 +33,7 @@ use actix_web::HttpRequest;
 
 pub mod auth;
 pub mod notes;
+pub mod roles;
 pub mod system;
 
 /// Checks if the request contains valid authorization header.

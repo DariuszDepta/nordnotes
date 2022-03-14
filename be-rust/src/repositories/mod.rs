@@ -21,4 +21,5 @@
 //! - provide common database operations for entities.
 
 pub mod notes;
+pub mod roles;
 pub mod users;

@@ -58,6 +58,11 @@ pub async fn start_server() -> Result<()> {
       .service(handlers::auth::login)
       // handlers for system operations
       .service(handlers::system::info)
+      // handlers for roles
+      .service(handlers::roles::create)
+      .service(handlers::roles::list)
+      .service(handlers::roles::find)
+      .service(handlers::roles::delete_all)
       // handlers for notes
       .service(handlers::notes::list)
       .service(handlers::notes::get_by_id)

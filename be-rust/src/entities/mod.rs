@@ -20,4 +20,11 @@
 //! - mapping types between Rust code and ScyllaDB database.
 
 pub mod note;
+pub mod role;
 pub mod user;
+
+/// Common interface for all entities.
+pub trait Entity {
+  /// Returns entity's unique identifier.
+  fn id(&self) -> String;
+}

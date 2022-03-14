@@ -27,4 +27,5 @@
 
 pub mod auth;
 pub mod notes;
+pub mod roles;
 pub mod users;

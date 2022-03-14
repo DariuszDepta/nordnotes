@@ -57,6 +57,11 @@ pub fn err_note_not_found(note_id: &str) -> NordNotesError {
   NordNotesError(format!("note not found, id = {}", note_id))
 }
 
+/// Creates a non-existing entity error.
+pub fn err_entity_not_found(entity: &str, id: &str) -> NordNotesError {
+  NordNotesError(format!("{} with id {} not found", entity, id))
+}
+
 /// Creates a missing required attribute error.
 pub fn err_required_attribute_not_specified(attribute_name: &str) -> NordNotesError {
   NordNotesError(format!("required attribute not specified, name = {}", attribute_name))
@@ -69,7 +74,12 @@ pub fn err_invalid_login_or_password() -> NordNotesError {
 
 /// Creates a failed note creation error.
 pub fn err_creating_note_failed() -> NordNotesError {
-  NordNotesError("creating a new note has failed".to_string())
+  NordNotesError("creating a new note failed".to_string())
+}
+
+/// Creates a failed role creation error.
+pub fn err_creating_role_failed() -> NordNotesError {
+  NordNotesError("creating a new role failed".to_string())
 }
 
 /// Creates a not authorized user error.

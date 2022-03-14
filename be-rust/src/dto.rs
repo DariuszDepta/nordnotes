@@ -17,6 +17,8 @@
 //! Implementation of data transfer objects.
 
 use crate::entities::note::NoteEntity;
+use crate::entities::role::RoleEntity;
+use crate::entities::Entity;
 use crate::errors::NordNotesError;
 use serde_derive::Serialize;
 
@@ -114,4 +116,32 @@ impl From<&NoteEntity> for NoteDto {
 pub struct LoginDto {
   #[serde(rename = "token")]
   pub token: String,
+}
+
+/// Data transfer object for a role.
+#[derive(Default, Serialize)]
+pub struct RoleDto {
+  /// Unique role identifier.
+  #[serde(rename = "roleId")]
+  pub role_id: String,
+  /// Name of the role.
+  #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+  pub name: Option<String>,
+}
+
+impl From<RoleEntity> for RoleDto {
+  /// Converts a [RoleEntity] into [RoleDto].
+  fn from(role: RoleEntity) -> Self {
+    Self::from(&role)
+  }
+}
+
+impl From<&RoleEntity> for RoleDto {
+  /// Converts a reference to [RoleEntity] into [RoleDto].
+  fn from(role: &RoleEntity) -> Self {
+    Self {
+      role_id: role.id(),
+      name: Some(role.name()),
+    }
+  }
 }
