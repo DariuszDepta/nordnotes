@@ -31,11 +31,9 @@ use crate::errors::Result;
 use crate::server::start_server;
 
 mod controllers;
-mod dto;
 mod entities;
 mod errors;
 mod handlers;
-mod params;
 mod repositories;
 mod server;
 mod services;

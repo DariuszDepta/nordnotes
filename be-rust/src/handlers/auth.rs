@@ -15,11 +15,42 @@
  */
 
 use crate::controllers::auth;
-use crate::dto::{LoginDto, ResultDto};
-use crate::params::LoginParams;
-use crate::server::ApplicationData;
+use crate::errors::*;
+use crate::server::{ApplicationData, ResultDto};
 use actix_web::web::Json;
 use actix_web::{post, web};
+use serde_derive::{Deserialize, Serialize};
+
+/// Data transfer object for login result.
+#[derive(Serialize)]
+pub struct LoginDto {
+  #[serde(rename = "token")]
+  pub token: String,
+}
+
+/// Parameters needed when processing user's login.
+#[derive(Deserialize)]
+pub struct LoginParams {
+  #[serde(rename = "login")]
+  pub login: Option<String>,
+  #[serde(rename = "password")]
+  pub password: Option<String>,
+}
+
+impl LoginParams {
+  /// Validates required parameters for logging a user.
+  pub fn validate(self) -> Result<(String, String)> {
+    if let Some(login_value) = self.login {
+      if let Some(password_value) = self.password {
+        Ok((login_value, password_value))
+      } else {
+        Err(err_required_attribute_not_specified("password"))
+      }
+    } else {
+      Err(err_required_attribute_not_specified("login"))
+    }
+  }
+}
 
 /// Handler for logging a user.
 #[post("/api/v1/login")]

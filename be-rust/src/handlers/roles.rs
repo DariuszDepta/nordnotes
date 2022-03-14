@@ -15,13 +15,42 @@
  */
 
 use crate::controllers::roles;
-use crate::dto::{ResultDto, RoleDto};
+use crate::entities::role::RoleEntity;
+use crate::entities::Entity;
 use crate::errors::*;
 use crate::handlers::is_authorized;
-use crate::server::ApplicationData;
+use crate::server::{ApplicationData, ResultDto};
 use actix_web::web::{Json, Path};
 use actix_web::{delete, get, post, web, HttpRequest};
-use serde_derive::Deserialize;
+use serde_derive::{Deserialize, Serialize};
+
+/// Data transfer object for a role.
+#[derive(Default, Serialize)]
+pub struct RoleDto {
+  /// Unique role identifier.
+  #[serde(rename = "roleId")]
+  pub role_id: String,
+  /// Name of the role.
+  #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+  pub name: Option<String>,
+}
+
+impl From<RoleEntity> for RoleDto {
+  /// Converts a [RoleEntity] into [RoleDto].
+  fn from(role: RoleEntity) -> Self {
+    Self::from(&role)
+  }
+}
+
+impl From<&RoleEntity> for RoleDto {
+  /// Converts a reference to [RoleEntity] into [RoleDto].
+  fn from(role: &RoleEntity) -> Self {
+    Self {
+      role_id: role.id(),
+      name: Some(role.name()),
+    }
+  }
+}
 
 /// Parameters needed when a new note is created.
 #[derive(Deserialize)]

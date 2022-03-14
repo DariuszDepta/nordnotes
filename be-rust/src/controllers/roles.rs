@@ -16,10 +16,9 @@
 
 //! Implementation of controllers for roles.
 
-use crate::dto::RoleDto;
 use crate::entities::role::RoleEntity;
 use crate::errors::*;
-use crate::handlers::roles::CreateRoleParams;
+use crate::handlers::roles::{CreateRoleParams, RoleDto};
 use crate::storage::Storage;
 
 /// Controller for creating a new role.

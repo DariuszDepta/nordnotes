@@ -15,13 +15,77 @@
  */
 
 use crate::controllers::notes;
-use crate::dto::{NoteDto, ResultDto};
+use crate::entities::note::NoteEntity;
 use crate::errors::*;
 use crate::handlers::is_authorized;
-use crate::params::CreateNoteParams;
-use crate::server::ApplicationData;
+use crate::server::{ApplicationData, ResultDto};
 use actix_web::web::{Json, Path};
 use actix_web::{delete, get, post, web, HttpRequest};
+use serde_derive::{Deserialize, Serialize};
+
+/// Data transfer object for a note.
+#[derive(Default, Serialize)]
+pub struct NoteDto {
+  /// Unique note identifier.
+  #[serde(rename = "noteId")]
+  pub note_id: String,
+  /// Title of the note.
+  #[serde(rename = "title", skip_serializing_if = "Option::is_none")]
+  pub title: Option<String>,
+  /// Content of the note (optional).
+  #[serde(rename = "content", skip_serializing_if = "Option::is_none")]
+  pub content: Option<String>,
+}
+
+impl From<NoteEntity> for NoteDto {
+  /// Converts a [NoteEntity] into [NoteDto].
+  fn from(note: NoteEntity) -> Self {
+    Self::from(&note)
+  }
+}
+
+impl From<&NoteEntity> for NoteDto {
+  /// Converts a reference to [NoteEntity] into [NoteDto].
+  fn from(note: &NoteEntity) -> Self {
+    Self {
+      note_id: note.note_id.clone(),
+      title: Some(note.title.clone()),
+      content: Some(note.content.clone()),
+    }
+  }
+}
+
+/// Parameters needed when a new note is created.
+#[derive(Deserialize)]
+pub struct CreateNoteParams {
+  /// The title of a note.
+  #[serde(rename = "title")]
+  pub title: Option<String>,
+  /// The content of a note.
+  #[serde(rename = "content")]
+  pub content: Option<String>,
+  /// Time to live, defines how long the content of a note will be available.
+  /// `ttl` has the format: `Nw`, `Nd`, `Nh` or `Nm`, where `N` is an integer
+  /// and letters have following meaning: `w` - weeks, `d` - days, `h` - hours, `m` - minutes.
+  /// For example `ttl` == "10d" means that the note will expire after 10 days from creation.
+  #[serde(rename = "ttl")]
+  pub ttl: Option<String>,
+}
+
+impl CreateNoteParams {
+  /// Validates required parameters for creating a new note.
+  pub fn validate(self) -> Result<(String, String, String)> {
+    if let Some(title) = self.title {
+      if let Some(content) = self.content {
+        Ok((title, content, self.ttl.unwrap_or_else(|| "".to_string())))
+      } else {
+        Err(err_required_attribute_not_specified("content"))
+      }
+    } else {
+      Err(err_required_attribute_not_specified("title"))
+    }
+  }
+}
 
 /// Handler for creating a new note.
 #[post("/api/v1/notes")]

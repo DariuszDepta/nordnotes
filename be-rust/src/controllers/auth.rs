@@ -16,9 +16,8 @@
 
 //! Implementation of controllers for authorization.
 
-use crate::dto::LoginDto;
 use crate::errors::*;
-use crate::params::LoginParams;
+use crate::handlers::auth::{LoginDto, LoginParams};
 use crate::storage::Storage;
 
 /// Controller for logging a user.

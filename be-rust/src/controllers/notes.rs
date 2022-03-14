@@ -16,9 +16,8 @@
 
 //! Implementation of controllers for notes.
 
-use crate::dto::NoteDto;
 use crate::errors::*;
-use crate::params::CreateNoteParams;
+use crate::handlers::notes::{CreateNoteParams, NoteDto};
 use crate::storage::Storage;
 
 /// Controller for deleting all notes.
