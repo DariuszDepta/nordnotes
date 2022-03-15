@@ -21,30 +21,31 @@ use crate::utils::uuid;
 use scylla::macros::FromRow;
 
 /// Role entity.
-#[derive(Debug, Clone, FromRow)]
+#[derive(FromRow)]
 pub struct RoleEntity {
   /// Unique role identifier.
   role_id: String,
-  /// Role name (always uppercase).
+  /// Role name.
   name: String,
 }
 
 impl Entity for RoleEntity {
-  /// Returns role's unique identifier.
+  /// Returns unique identifier of the role.
   fn id(&self) -> String {
     self.role_id.clone()
   }
 }
 
 impl RoleEntity {
-  /// Creates a new role.
+  /// Creates a new role with specified name.
+  /// Role names are always converted to uppercase.
   pub fn new(name: &str) -> Self {
     Self {
       role_id: uuid(),
       name: name.to_uppercase(),
     }
   }
-  /// Returns role's name.
+  /// Returns the name of the role.
   pub fn name(&self) -> String {
     self.name.clone()
   }

@@ -22,8 +22,9 @@
 //! - defining CORS permissions,
 //! - initializing an access to shared storage.
 
-use crate::errors::{NordNotesError, *};
+use crate::errors::*;
 use crate::handlers;
+use crate::services::system::initialize_roles_and_users;
 use crate::storage::Storage;
 use actix_cors::Cors;
 use actix_web::web::Json;
@@ -87,6 +88,7 @@ async fn handler_404(req: HttpRequest) -> std::io::Result<Json<ResultDto<()>>> {
 /// Starts the server.
 pub async fn start_server() -> Result<()> {
   let storage = Storage::new().await?;
+  initialize_roles_and_users(&storage).await?;
   let application_data = web::Data::new(ApplicationData {
     storage: tokio::sync::RwLock::new(storage),
   });

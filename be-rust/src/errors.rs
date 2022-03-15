@@ -58,8 +58,8 @@ pub fn err_note_not_found(note_id: &str) -> NordNotesError {
 }
 
 /// Creates a non-existing entity error.
-pub fn err_entity_not_found(entity: &str, id: &str) -> NordNotesError {
-  NordNotesError(format!("{} with id {} not found", entity, id))
+pub fn err_entity_not_found(entity: &str, description: &str) -> NordNotesError {
+  NordNotesError(format!("{} not found: {}", entity, description))
 }
 
 /// Creates a missing required attribute error.

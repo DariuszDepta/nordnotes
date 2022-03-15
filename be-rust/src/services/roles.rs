@@ -14,11 +14,16 @@
  * SOFTWARE.
  */
 
-//! Implementation of services.
-//!
-//! Service is the smallest part of business logic.
-//! Services are used by controllers to implement more complex logic.
-//! Service may call other services to complete its tasks.
+use crate::entities::role::RoleEntity;
+use crate::errors::Result;
+use crate::storage::Storage;
 
-pub mod roles;
-pub mod system;
+/// Service for retrieving a single role by its identifier.
+pub async fn find_by_id(role_id: String, storage: &Storage) -> Result<RoleEntity> {
+  Ok(storage.roles_repository.find_by_id(&role_id).await?)
+}
+
+/// Service for retrieving a single role by its name.
+pub async fn find_by_name(role_name: String, storage: &Storage) -> Result<RoleEntity> {
+  Ok(storage.roles_repository.find_by_name(&role_name).await?)
+}

@@ -27,7 +27,8 @@ use std::sync::Arc;
 lazy_static! {
   static ref QUERY_CREATE: String = format!("INSERT INTO {}.{} (role_id, name) VALUES (?, ?)", KEYSPACE, TABLE_ROLES);
   static ref QUERY_LIST: String = format!("SELECT role_id, name FROM {}.{}", KEYSPACE, TABLE_ROLES);
-  static ref QUERY_FIND: String = format!("SELECT role_id, name FROM {}.{} WHERE role_id = ?", KEYSPACE, TABLE_ROLES);
+  static ref QUERY_FIND_BY_ID: String = format!("SELECT role_id, name FROM {}.{} WHERE role_id = ?", KEYSPACE, TABLE_ROLES);
+  static ref QUERY_FIND_BY_NAME: String = format!("SELECT role_id, name FROM {}.{} WHERE name = ?", KEYSPACE, TABLE_ROLES);
   static ref QUERY_DELETE_ALL: String = format!("TRUNCATE TABLE {}.{}", KEYSPACE, TABLE_ROLES);
 }
 
@@ -40,6 +41,12 @@ pub struct RolesRepository {
 #[derive(ValueList)]
 struct RoleId {
   role_id: String,
+}
+
+/// Value list containing the role's name.
+#[derive(ValueList)]
+struct RoleName {
+  name: String,
 }
 
 impl RolesRepository {
@@ -65,14 +72,24 @@ impl RolesRepository {
     Ok(roles)
   }
   /// Searches for a role with specified identifier.
-  pub async fn find(&self, role_id: &str) -> Result<RoleEntity> {
+  pub async fn find_by_id(&self, role_id: &str) -> Result<RoleEntity> {
     let id = RoleId { role_id: role_id.to_string() };
-    if let Some(rows) = self.session.query(QUERY_FIND.as_str(), id).await.map_err(err_query)?.rows {
+    if let Some(rows) = self.session.query(QUERY_FIND_BY_ID.as_str(), id).await.map_err(err_query)?.rows {
       if let Some(row) = rows.into_typed::<RoleEntity>().take(1).next() {
         return row.map_err(err_from_row);
       }
     }
     Err(err_entity_not_found("role", role_id))
+  }
+  /// Searches for a role with specified name.
+  pub async fn find_by_name(&self, role_name: &str) -> Result<RoleEntity> {
+    let params = RoleName { name: role_name.to_string() };
+    if let Some(rows) = self.session.query(QUERY_FIND_BY_NAME.as_str(), params).await.map_err(err_query)?.rows {
+      if let Some(row) = rows.into_typed::<RoleEntity>().take(1).next() {
+        return row.map_err(err_from_row);
+      }
+    }
+    Err(err_entity_not_found("role", role_name))
   }
   /// Deletes all roles.
   pub async fn delete_all(&self) -> Result<()> {

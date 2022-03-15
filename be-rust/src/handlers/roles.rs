@@ -100,7 +100,7 @@ pub async fn list(data: web::Data<ApplicationData>) -> std::io::Result<Json<Resu
 pub async fn find(req: HttpRequest, id: Path<String>, data: web::Data<ApplicationData>) -> std::io::Result<Json<ResultDto<RoleDto>>> {
   let storage = data.storage.read().await;
   if is_authorized(&req, &storage) {
-    match roles::find(id.into_inner(), &storage).await {
+    match roles::find_by_id(id.into_inner(), &storage).await {
       Ok(result) => Ok(Json(ResultDto::data(result))),
       Err(reason) => Ok(Json(ResultDto::error(reason))),
     }
@@ -109,8 +109,8 @@ pub async fn find(req: HttpRequest, id: Path<String>, data: web::Data<Applicatio
   }
 }
 
-/// Handler for deleting all notes.
-#[delete("/api/v1/notes")]
+/// Handler for deleting all roles.
+#[delete("/api/v1/roles")]
 pub async fn delete_all(data: web::Data<ApplicationData>) -> std::io::Result<Json<ResultDto<String>>> {
   let mut storage = data.storage.write().await;
   match roles::delete_all(&mut storage).await {

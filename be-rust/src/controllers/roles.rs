@@ -19,6 +19,7 @@
 use crate::entities::role::RoleEntity;
 use crate::errors::*;
 use crate::handlers::roles::{CreateRoleParams, RoleDto};
+use crate::services;
 use crate::storage::Storage;
 
 /// Controller for creating a new role.
@@ -38,8 +39,8 @@ pub async fn list(storage: &Storage) -> Result<Vec<RoleDto>> {
 }
 
 /// Controller for retrieving a single role by its identifier.
-pub async fn find(id: String, storage: &Storage) -> Result<RoleDto> {
-  Ok(storage.roles_repository.find(&id).await?.into())
+pub async fn find_by_id(id: String, storage: &Storage) -> Result<RoleDto> {
+  Ok(services::roles::find_by_id(id, &storage).await?.into())
 }
 
 /// Controller for deleting all roles.
